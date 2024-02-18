@@ -9,11 +9,13 @@ public class KillBoost : BasePlugin, IPluginConfig<KillBoostConfig>
 {
     public override string ModuleName => "Kill Boost";
     public override string ModuleAuthor => "BOINK";
-    public override string ModuleVersion => "1.0.0";
+    public override string ModuleVersion => "1.0.1";
 
     public KillBoostConfig Config { get; set; } = new();
 
     ConVar? TeammatesAreEnemies;
+
+    public Dictionary<int, float> LastSpeedBoost = new();
     public override void Load(bool hotReload)
     {
         FindConvars();
@@ -63,8 +65,44 @@ public class KillBoost : BasePlugin, IPluginConfig<KillBoostConfig>
             pawn.HealthShotBoostExpirationTime = Server.CurrentTime + Config.EffectDuration;
             Utilities.SetStateChanged(pawn, "CCSPlayerPawn", "m_flHealthShotBoostExpirationTime");
 
+
+            if(Config.SpeedBoost != 1.0f)
+            {
+                SetPlayerSpeed(pawn, Config.SpeedBoost);
+                int userId = -1;
+                if (attacker.UserId != null)
+                {
+                    userId = (int)attacker.UserId;
+                    LastSpeedBoost[userId] = Server.CurrentTime;
+                }
+
+                AddTimer(Config.SpeedBoostDuration, () =>
+                {
+                    if(userId != -1)
+                    {
+                        // Cancel previous timer on consecutive kills
+                        float timeSinceSpeedBoost = (Server.CurrentTime - LastSpeedBoost[userId]) + 0.1f;
+
+                        if (timeSinceSpeedBoost < Config.SpeedBoostDuration)
+                            return;
+                        else
+                            LastSpeedBoost.Remove(userId);
+                    }
+
+                    SetPlayerSpeed(pawn, 1f);
+                });
+            }
+
+
             return HookResult.Continue;
         });
+    }
+
+    public void SetPlayerSpeed(CCSPlayerPawn? pawn, float speed)
+    {
+        if (pawn == null || !pawn.IsValid) return;
+        pawn.VelocityModifier = speed;
+        Utilities.SetStateChanged(pawn, "CCSPlayerPawnBase", "m_flVelocityModifier");
     }
 
     public bool FindConvars()

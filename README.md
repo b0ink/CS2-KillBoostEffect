@@ -1,6 +1,6 @@
 # Counter-Strike 2 Kill Boost Effect
 
-Applies the blue healthshot screen effect on player kill.
+Applies the blue healthshot screen effect and speed boost on player kill.
 
 ## Requirements
 - Metamod
@@ -14,6 +14,8 @@ Edit the plugin's config found in `addons/counterstrikesharp/configs/plugins/Kil
 ```json
 {
   "EffectDuration": 0.8,
+  "SpeedBoost": 1.2,
+  "SpeedBoostDuration": 1,
   "KillsRequired": 0,
   "KillCountFrequency": 1,
   "ApplyOnHeadshotsOnly": false,
@@ -21,6 +23,10 @@ Edit the plugin's config found in `addons/counterstrikesharp/configs/plugins/Kil
 }
 ```
 `EffectDuration`: How long the blue effect lasts (in seconds) before entirely fading out.
+
+`SpeedBoost`: Amount of speed boost to apply. Set this to `1` for no speed boost. Anything below `1` will reduce the player's normal speed.
+
+`SpeedBoostDuration`: How long the speed boost lasts (in seconds) before returning to normal.
 
 `KillsRequired`: Minimum amount of kills required before the effect is applied. In Competitive/Casual game modes this is based off kills per round, in Deathmatch this will be per player spawn.
 
