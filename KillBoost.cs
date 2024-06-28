@@ -9,7 +9,7 @@ public class KillBoost : BasePlugin, IPluginConfig<KillBoostConfig>
 {
     public override string ModuleName => "Kill Boost";
     public override string ModuleAuthor => "BOINK";
-    public override string ModuleVersion => "1.0.1";
+    public override string ModuleVersion => "2.0.0";
 
     public KillBoostConfig Config { get; set; } = new();
 
