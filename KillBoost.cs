@@ -9,7 +9,7 @@ public class KillBoost : BasePlugin, IPluginConfig<KillBoostConfig>
 {
     public override string ModuleName => "Kill Boost";
     public override string ModuleAuthor => "BOINK";
-    public override string ModuleVersion => "3.0.0";
+    public override string ModuleVersion => "3.0.1";
 
     public KillBoostConfig Config { get; set; } = new();
 
@@ -102,7 +102,7 @@ public class KillBoost : BasePlugin, IPluginConfig<KillBoostConfig>
     {
         if (pawn == null || !pawn.IsValid) return;
         pawn.VelocityModifier = speed;
-        Utilities.SetStateChanged(pawn, "CCSPlayerPawnBase", "m_flVelocityModifier");
+        Utilities.SetStateChanged(pawn, "CCSPlayerPawn", "m_flVelocityModifier");
     }
 
     public bool FindConvars()
